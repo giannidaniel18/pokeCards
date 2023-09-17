@@ -7,10 +7,13 @@ import React, { FC, useState } from "react";
 type Props = {
   type: pokemonTypes;
   onChangeType: (type: string) => void;
+  selected: boolean;
 };
 
-const TypeButton: FC<Props> = ({ type, onChangeType }) => {
+const TypeButton: FC<Props> = ({ type, onChangeType, selected }) => {
   // const [selectedType, setselectedType] = useState<pokemonTypes | null>(null);
+  console.log(selected);
+  const selectedStyle = selected ? "border md:scale-125 md:mx-4 mx-1" : "";
 
   const handleSelectedType = (e: any) => {
     e.preventDefault();
@@ -34,7 +37,7 @@ const TypeButton: FC<Props> = ({ type, onChangeType }) => {
   return (
     <button
       id={type}
-      className={`${bgColorsCode[type]} rounded-full p-1 hover:scale-110 transition-all`}
+      className={`${bgColorsCode[type]} rounded-full p-1 hover:scale-110 transition-all w-5 h-5 md:w-6 md:h-6  ${selectedStyle}`}
       onClick={handleSelectedType}
     >
       <Image alt={"tipo de pokemon"} src={`/icons/poketypes/${type}.svg`} width={15} height={15} id={type} />

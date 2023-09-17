@@ -1,82 +1,101 @@
 import React, { useEffect, useState } from "react";
-
-import useFetch from "@/hooks/useFetch";
 import PokemonCard from "../common/PokemonCard";
-import { PokemonCardType, pokemonTypes } from "@/types/types";
-import { type } from "os";
 import TypeButton from "../common/TypeButton";
+import useCards from "@/hooks/useCards";
+import PokemonNameFilter from "../common/PokemonNameFilter";
+import { CgPokemonIcon, TfiReloadIcon } from "@/lib/reactIcons";
 
 const PokemonCardContainer = () => {
-  const [cards, setCards] = useState<PokemonCardType[]>([]);
-  const [types, setTypes] = useState<[]>([]);
-  const { startRequest } = useFetch();
+  const { cards, getCards, types } = useCards();
+  const [pokemonType, setPokemonType] = useState("");
+  const [numberOfPages, setNumberOfPages] = useState(50);
+  const [pokemonName, setPokemonName] = useState("");
   const [filters, setFilters] = useState({ numberOfPages: 50, pokemonName: "", pokemonType: "" });
 
   // const cards = await fetchPokemon();
 
-  const getCardById = async (id: string) => {
-    const pokemonId = id;
-    const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/cards/${pokemonId}`);
-    if (apiResponse.ok) {
-      console.log(apiResponse);
-      //   setCards(apiResponse.data.data);
-    }
-  };
-
-  const getCards = async (cantidad: number = 50, nombre: string = "", type: string = "") => {
-    const qFilterName = `name:${nombre}*`;
-    const qFilterType = `types:${type}*`;
-
-    const queryParams = `?q=${qFilterName} ${qFilterType}&pageSize=${cantidad}`;
-    console.log(queryParams);
-    const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/cards${queryParams}`);
-    if (apiResponse.ok) {
-      setCards(apiResponse.data.data);
-    }
-  };
-
-  const getTypes = async () => {
-    const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/types`);
-    if (apiResponse.ok) {
-      setTypes(apiResponse.data.data);
-    }
+  const resetFilters = () => {
+    setPokemonName("");
+    setPokemonType("");
+    setNumberOfPages(50);
   };
 
   const handleSelectType = (type: string) => {
+    setPokemonType(type);
+  };
+
+  const handleSetPokemonName = (name: string) => {
+    setPokemonName(name);
+  };
+
+  const ClearPokemonName = (e: any) => {
+    e.preventDefault();
+    setPokemonName("");
+  };
+
+  const AplyFilters = () => {
     const newFilters = filters;
-    newFilters.pokemonType = type;
-
+    newFilters.pokemonName = pokemonName;
+    newFilters.pokemonType = pokemonType;
+    newFilters.numberOfPages = numberOfPages;
     setFilters(newFilters);
-
+    console.log(newFilters);
     getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType);
   };
 
-  useEffect(() => {
-    console.log("first");
-    getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType);
-    getTypes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log(filters);
   return (
-    <>
+    <div className="flex flex-col gap-2 ">
       {types && (
-        <div className="flex flex-row gap-2 flex-wrap h-20 items-center">
-          {types.map((type) => (
-            <TypeButton key={type} type={type} onChangeType={handleSelectType} />
-          ))}
+        <div className="flex  flex-col md:items-start p-2">
+          <div className="flex gap-4 flex-col  p-2">
+            <div className="flex flex-col text-start md:w-fit  ">
+              <span className="text-sm font-medium">Filter by type</span>
+              <div className="flex flex-row gap-2 p-2 border rounded-xl justify-center md:justify-start">
+                {types.map((type) => (
+                  <TypeButton
+                    key={type}
+                    type={type}
+                    onChangeType={handleSelectType}
+                    selected={pokemonType === type ? true : false}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col text-start md:w-fit ">
+              <PokemonNameFilter
+                onSetPokemonNameFilter={handleSetPokemonName}
+                onClearPokemonName={ClearPokemonName}
+                pokemonName={pokemonName}
+              />
+            </div>
+          </div>
+          <div className="flex flex-row place-items-end justify-end w-full md:w-fit">
+            <button
+              className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 "
+              onClick={AplyFilters}
+            >
+              go
+              <CgPokemonIcon />
+            </button>
+            <button
+              className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 "
+              onClick={resetFilters}
+            >
+              Reset
+              <TfiReloadIcon />
+            </button>
+          </div>
         </div>
       )}
 
       {cards && (
-        <div className="flex flex-row flex-wrap border justify-center">
+        <div className="flex flex-row flex-wrap justify-center">
           {cards.map((card) => (
             <PokemonCard key={card.id} card={card} />
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
