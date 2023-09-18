@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
-import PokemonCard from "../common/PokemonCard";
-import TypeButton from "../common/TypeButton";
-import useCards from "@/hooks/useCards";
-import PokemonNameFilter from "../common/PokemonNameFilter";
-import { CgPokemonIcon, TfiReloadIcon } from "@/lib/reactIcons";
+import React, { useEffect, useState } from 'react';
+import PokemonCard from '../common/PokemonCard';
+import TypeButton from '../common/TypeButton';
+import useCards from '@/hooks/useCards';
+import PokemonNameFilter from '../common/PokemonNameFilter';
+import { CgPokemonIcon, TfiReloadIcon } from '@/lib/reactIcons';
+import PageFilter from '../common/PageFilter';
 
 const PokemonCardContainer = () => {
   const { cards, getCards, types } = useCards();
-  const [pokemonType, setPokemonType] = useState("");
+  const [pokemonType, setPokemonType] = useState('');
   const [numberOfPages, setNumberOfPages] = useState(50);
-  const [pokemonName, setPokemonName] = useState("");
-  const [filters, setFilters] = useState({ numberOfPages: 50, pokemonName: "", pokemonType: "" });
+  const [pokemonName, setPokemonName] = useState('');
+  const [filters, setFilters] = useState({ numberOfPages: 50, pokemonName: '', pokemonType: '' });
 
   // const cards = await fetchPokemon();
 
   const resetFilters = () => {
-    setPokemonName("");
-    setPokemonType("");
+    setPokemonName('');
+    setPokemonType('');
     setNumberOfPages(50);
   };
 
@@ -30,7 +31,11 @@ const PokemonCardContainer = () => {
 
   const ClearPokemonName = (e: any) => {
     e.preventDefault();
-    setPokemonName("");
+    setPokemonName('');
+  };
+
+  const handleNumberOfPagesChange = (newNumberOfPages: number) => {
+    setNumberOfPages(newNumberOfPages);
   };
 
   const AplyFilters = () => {
@@ -39,7 +44,8 @@ const PokemonCardContainer = () => {
     newFilters.pokemonType = pokemonType;
     newFilters.numberOfPages = numberOfPages;
     setFilters(newFilters);
-    console.log(newFilters);
+    // console.log(newFilters);
+    // console.log(numberOfPages);
     getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType);
   };
 
@@ -52,35 +58,23 @@ const PokemonCardContainer = () => {
               <span className="text-sm font-medium">Filter by type</span>
               <div className="flex flex-row gap-2 p-2 border rounded-xl justify-center md:justify-start">
                 {types.map((type) => (
-                  <TypeButton
-                    key={type}
-                    type={type}
-                    onChangeType={handleSelectType}
-                    selected={pokemonType === type ? true : false}
-                  />
+                  <TypeButton key={type} type={type} onChangeType={handleSelectType} selected={pokemonType === type ? true : false} />
                 ))}
               </div>
             </div>
             <div className="flex flex-col text-start md:w-fit ">
-              <PokemonNameFilter
-                onSetPokemonNameFilter={handleSetPokemonName}
-                onClearPokemonName={ClearPokemonName}
-                pokemonName={pokemonName}
-              />
+              <PokemonNameFilter onSetPokemonNameFilter={handleSetPokemonName} onClearPokemonName={ClearPokemonName} pokemonName={pokemonName} />
+            </div>
+            <div>
+              <PageFilter onChangeNumberOfPages={handleNumberOfPagesChange} pageNumber={numberOfPages} />
             </div>
           </div>
           <div className="flex flex-row place-items-end justify-end w-full md:w-fit">
-            <button
-              className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 "
-              onClick={AplyFilters}
-            >
+            <button className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 " onClick={AplyFilters}>
               go
               <CgPokemonIcon />
             </button>
-            <button
-              className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 "
-              onClick={resetFilters}
-            >
+            <button className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 " onClick={resetFilters}>
               Reset
               <TfiReloadIcon />
             </button>
