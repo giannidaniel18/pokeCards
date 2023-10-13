@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import useFetch from "./useFetch";
 import { PokemonCardType } from "@/types/types";
+import { type } from "os";
 
 export default function useCards() {
   const { startRequest } = useFetch();
+  const [loading, setLoading] = useState(false);
   const [cards, setCards] = useState<PokemonCardType[]>([]);
-  const [types, setTypes] = useState<[]>([]);
+  // const [types, setTypes] = useState<[]>([]);
   const [filters, setFilters] = useState({ numberOfPages: 50, pokemonName: "", pokemonType: "" });
 
   const getCardById = async (id: string) => {
@@ -17,14 +19,17 @@ export default function useCards() {
     }
   };
 
-  const getTypes = async () => {
-    const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/types`);
-    if (apiResponse.ok) {
-      setTypes(apiResponse.data.data);
-    }
-  };
+  // const getTypes = async () => {
+  //   setLoading(true);
+  //   const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/types`);
+  //   if (apiResponse.ok) {
+  //     setTypes(apiResponse.data.data);
+  //     setLoading(false);
+  //   }
+  // };
 
   const getCards = async (cantidad: number = 50, nombre: string = "", type: string = "") => {
+    setLoading(true);
     const qFilterName = `name:${nombre}*`;
     const qFilterType = `types:${type}*`;
 
@@ -33,6 +38,7 @@ export default function useCards() {
     const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/cards${queryParams}`);
     if (apiResponse.ok) {
       setCards(apiResponse.data.data);
+      setLoading(false);
     }
   };
 
@@ -48,9 +54,9 @@ export default function useCards() {
   useEffect(() => {
     console.log("first");
     getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType);
-    getTypes();
+    // getTypes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { cards, types, getCards };
+  return { cards, getCards, loading };
 }

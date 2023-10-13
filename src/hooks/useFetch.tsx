@@ -9,7 +9,7 @@ export default function useFetch() {
     return axios({
       method: method,
       url: url,
-      headers: { "Content-Type": "application/json", "X-Api-Key": "8b064af7-b769-4322-ab64-4e2a6e41e485" },
+      headers: { "Content-Type": "application/json", "X-Api-Key": "4de5e85c-9084-435b-9fff-0a7202c6703b" },
       data: payload,
     })
       .then((response: any) => {

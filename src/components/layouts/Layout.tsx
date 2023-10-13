@@ -10,7 +10,7 @@ type Props = {
 const Layout = ({ children }: Props) => {
   return (
     <main className={`flex min-h-screen flex-col items-starts justify-start  ${inter.className}`}>
-      <div className="bg-red-500 flex flex-row justify-between w-full">barra de navegación</div>
+      <div className="bg-red-500 flex flex-row justify-between w-full h-10 fixed z-50 ">barra de navegación</div>
       {children}
     </main>
   );

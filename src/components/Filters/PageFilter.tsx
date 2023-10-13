@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import InputSlider from 'react-input-slider';
+import { FC, useState } from "react";
+import InputSlider from "react-input-slider";
 
 type Props = {
   onChangeNumberOfPages: (type: number) => void;
@@ -11,33 +11,34 @@ const PageFilter: FC<Props> = ({ onChangeNumberOfPages, pageNumber }) => {
 
   const handleChange = (e: any) => {
     const value = e.target.value;
-    if (value === '' || (Number(value) >= 0 && Number(value) <= 250)) {
+    if (value === "" || (Number(value) >= 0 && Number(value) <= 250)) {
       onChangeNumberOfPages(Number(value));
     }
   };
 
   return (
-    <>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Number of Cards</label>
+    <div className="flex flex-col items-start gap-2">
+      <div>
+        <label className="block text-white text-sm font-bold mb-2 ">Number of Cards</label>
         <input
           type="text"
-          className="w-full px-3 py-2 placeholder-gray-400 text-gray-700 border rounded-lg focus:outline-none "
+          className="w-16 px-3 py-2 placeholder-gray-400 text-gray-700 border rounded-lg focus:outline-none "
           placeholder="Escribe un número entre 0 y 250"
           value={pageNumber}
           onChange={handleChange}
         />
       </div>
-      <div className="mb-4">
+      <div className="flex flex-row">
+        {" "}
         <InputSlider
           styles={{
-            track: { backgroundColor: 'white' },
+            track: { backgroundColor: "white" },
             active: {
-              backgroundColor: 'lightblue',
+              backgroundColor: "lightblue",
             },
             thumb: {
-              backgroundColor: 'white',
-              borderColor: 'black',
+              backgroundColor: "white",
+              borderColor: "black",
             },
           }}
           axis="x"
@@ -46,9 +47,8 @@ const PageFilter: FC<Props> = ({ onChangeNumberOfPages, pageNumber }) => {
           xmax={250}
           onChange={({ x }) => onChangeNumberOfPages(x)}
         />
-        <div className="text-gray-700 mt-2 text-center">{pageNumber}</div>
       </div>
-    </>
+    </div>
   );
 };
 

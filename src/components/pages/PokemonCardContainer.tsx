@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import PokemonCard from '../common/PokemonCard';
-import TypeButton from '../common/TypeButton';
-import useCards from '@/hooks/useCards';
-import PokemonNameFilter from '../common/PokemonNameFilter';
-import { CgPokemonIcon, TfiReloadIcon } from '@/lib/reactIcons';
-import PageFilter from '../common/PageFilter';
+import React, { useState } from "react";
+import PokemonCard from "../common/PokemonCard";
+import useCards from "@/hooks/useCards";
+import FiltersContainer from "../Filters/FiltersContainer";
 
 const PokemonCardContainer = () => {
-  const { cards, getCards, types } = useCards();
-  const [pokemonType, setPokemonType] = useState('');
+  const { cards, getCards, loading } = useCards();
+  const [pokemonType, setPokemonType] = useState("");
   const [numberOfPages, setNumberOfPages] = useState(50);
-  const [pokemonName, setPokemonName] = useState('');
-  const [filters, setFilters] = useState({ numberOfPages: 50, pokemonName: '', pokemonType: '' });
-
+  const [pokemonName, setPokemonName] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({ numberOfPages: 50, pokemonName: "", pokemonType: "" });
   // const cards = await fetchPokemon();
 
+  const toggleShowFilters = () => {
+    setShowFilters(!showFilters);
+  };
+
   const resetFilters = () => {
-    setPokemonName('');
-    setPokemonType('');
+    setPokemonName("");
+    setPokemonType("");
     setNumberOfPages(50);
   };
 
@@ -27,11 +28,6 @@ const PokemonCardContainer = () => {
 
   const handleSetPokemonName = (name: string) => {
     setPokemonName(name);
-  };
-
-  const ClearPokemonName = (e: any) => {
-    e.preventDefault();
-    setPokemonName('');
   };
 
   const handleNumberOfPagesChange = (newNumberOfPages: number) => {
@@ -49,46 +45,57 @@ const PokemonCardContainer = () => {
     getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType);
   };
 
+  const tamaño = loading ? "100vh" : "100%";
+
   return (
-    <div className="flex flex-col gap-2 ">
-      {types && (
-        <div className="flex  flex-col md:items-start p-2">
-          <div className="flex gap-4 flex-col  p-2">
-            <div className="flex flex-col text-start md:w-fit  ">
-              <span className="text-sm font-medium">Filter by type</span>
-              <div className="flex flex-row gap-2 p-2 border rounded-xl justify-center md:justify-start">
-                {types.map((type) => (
-                  <TypeButton key={type} type={type} onChangeType={handleSelectType} selected={pokemonType === type ? true : false} />
-                ))}
+    <div className="flex flex-col md:flex-row gap-1 bg-slate-800">
+      <div className="flex flex-col md:bg-slate-700">
+        {!showFilters && (
+          <div className="z-50 h-10">
+            <div className=" h-fit mb-96 md:w-[150px] md:mb-0 mt-12 md:p-4 ">
+              <div className="fixed  bg-slate-700">
+                <button onClick={toggleShowFilters}>Show FIlters</button>
               </div>
             </div>
-            <div className="flex flex-col text-start md:w-fit ">
-              <PokemonNameFilter onSetPokemonNameFilter={handleSetPokemonName} onClearPokemonName={ClearPokemonName} pokemonName={pokemonName} />
-            </div>
-            <div>
-              <PageFilter onChangeNumberOfPages={handleNumberOfPagesChange} pageNumber={numberOfPages} />
+          </div>
+        )}
+        {showFilters && (
+          <div className="z-50">
+            <div className=" h-fit mb-96 md:w-[450px] md:mb-0 mt-8 md:p-2">
+              <FiltersContainer
+                AplyFilters={AplyFilters}
+                handleNumberOfPagesChange={handleNumberOfPagesChange}
+                handleSelectType={handleSelectType}
+                handleSetPokemonName={handleSetPokemonName}
+                numberOfPages={numberOfPages}
+                pokemonName={pokemonName}
+                pokemonType={pokemonType}
+                resetFilters={resetFilters}
+                toggleShowFilters={toggleShowFilters}
+              />
             </div>
           </div>
-          <div className="flex flex-row place-items-end justify-end w-full md:w-fit">
-            <button className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 " onClick={AplyFilters}>
-              go
-              <CgPokemonIcon />
-            </button>
-            <button className="text-xl flex flex-row gap-2 border rounded-xl items-center self-end p-2 m-2 " onClick={resetFilters}>
-              Reset
-              <TfiReloadIcon />
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
+      <div className={`flex-flex col mt-10 h-[${tamaño}]`}>
+        <div className="flex flex-row gap-4 p-2">
+          {pokemonName && (
+            <div className="p-2 bg-slate-950 rounded-3xl">
+              <p>Nombre : {pokemonName}</p>
+            </div>
+          )}
 
-      {cards && (
-        <div className="flex flex-row flex-wrap justify-center">
-          {cards.map((card) => (
-            <PokemonCard key={card.id} card={card} />
-          ))}
+          {pokemonType && (
+            <div className="p-2 bg-slate-950 rounded-3xl">
+              {" "}
+              <p>tipo : {pokemonType}</p>{" "}
+            </div>
+          )}
         </div>
-      )}
+        <div className="flex flex-row flex-wrap justify-center ">
+          {loading ? "Loading ... " : cards.map((card) => <PokemonCard key={card.id} card={card} />)}
+        </div>
+      </div>
     </div>
   );
 };
