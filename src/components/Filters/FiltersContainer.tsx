@@ -29,7 +29,7 @@ const FiltersContainer: FC<Props> = ({
   toggleShowFilters,
 }) => {
   return (
-    <div className="flex flex-col text-start md:w-fit w-full bg-slate-700 p-4 gap-4 fixed ">
+    <div className="flex flex-col text-start w-full md:h-[100vh] bg-slate-700 p-4 gap-4 ">
       <button onClick={toggleShowFilters} className="text-right">
         X
       </button>
