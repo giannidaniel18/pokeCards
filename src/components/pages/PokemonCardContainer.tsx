@@ -53,15 +53,15 @@ const PokemonCardContainer = () => {
     <>
       <div className="flex flex-col md:flex-row gap-1">
         <div className="flex flex-col ">
+          <div className="z-50 h-10 ">
           {!showFilters && !loading && (
-            <div className="z-50 h-10">
-              <div className="fixed mt-16 ml-2">
+              <div className="fixed top-16 left-5">
                 <button onClick={toggleShowFilters} className="rounded-full bg-slate-800 p-2">
                   <BiFilterAlt size={40} />
                 </button>
               </div>
-            </div>
           )}
+          </div>
         </div>
         <div className={`flex-flex col mt-10 h-[${tamaño}]`}>
           <div className="flex flex-row gap-4 p-2">
@@ -73,7 +73,6 @@ const PokemonCardContainer = () => {
 
             {pokemonType && (
               <div className="p-2 bg-slate-950 rounded-3xl">
-                {" "}
                 <p>tipo : {pokemonType}</p>{" "}
               </div>
             )}
@@ -83,11 +82,8 @@ const PokemonCardContainer = () => {
           </div>
         </div>
       </div>
-      {showFilters && (
-        <div
-          className={`fixed z-50 transform top-0 left-0 md:w-[450px] transition-all duration-300 ease-in-out ${
-            showFilters ? "translate-x-0 translate-y-0" : "-translate-x-full -translate-y-full"
-          } lg:translate-x-0 lg:translate-y-0`}
+      <div
+          className={`fixed z-50 top-[-406px] md:top-0 md:left-[-450px] md:w-[450px] ${showFilters ? ` translate-y-full md:translate-x-full md:translate-y-0 duration-300` : `-translate-y-full md:-translate-x-full md:translate-y-0 duration-300`} `}
         >
           <FiltersContainer
             AplyFilters={AplyFilters}
@@ -101,7 +97,6 @@ const PokemonCardContainer = () => {
             toggleShowFilters={toggleShowFilters}
           />
         </div>
-      )}
     </>
   );
 };

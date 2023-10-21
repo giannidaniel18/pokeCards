@@ -29,8 +29,8 @@ const FiltersContainer: FC<Props> = ({
   toggleShowFilters,
 }) => {
   return (
-    <div className="flex flex-col text-start w-full md:h-[100vh] bg-slate-700 p-4 gap-4 ">
-      <button onClick={toggleShowFilters} className="text-right">
+    <div className="flex flex-col text-start md:h-[100vh] bg-slate-800 opacity-95 p-4 gap-4 shadow-lg shadow-slate-400 ">
+      <button onClick={toggleShowFilters} className="w-fit self-end p-2">
         X
       </button>
       <TypeFilter onSetPokemonType={handleSelectType} selectedType={pokemonType} />
