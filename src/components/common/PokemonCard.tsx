@@ -22,9 +22,12 @@ const PokemonCard: FC<Props> = ({ card }) => {
   //   };
 
   return (
-    <div className="flex flex-col items-center p-4">
+    <div className="flex flex-col items-center p-4  ">
       <p className="dark:text-white">{card.name}</p>
-      <Image className="relative" alt={card.name} src={card.images.large} width={250} height={250} />
+     <div className='w-[250px] h-[350px] relative'>
+      <Image className="relative" alt={card.name} src={card.images.large}  fill/>
+     </div>
+
     </div>
   );
 };

@@ -32,8 +32,9 @@ export default function useCards() {
     setLoading(true);
     const qFilterName = `name:${nombre}*`;
     const qFilterType = `types:${type}*`;
+    const qFilterSuperTypes= `supertype:energy`
 
-    const queryParams = `?q=${qFilterName} ${qFilterType}&pageSize=${cantidad}`;
+    const queryParams = `?q=${qFilterName} ${qFilterSuperTypes} ${qFilterType}&pageSize=${cantidad}`;
     console.log(queryParams);
     const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/cards${queryParams}`);
     if (apiResponse.ok) {
