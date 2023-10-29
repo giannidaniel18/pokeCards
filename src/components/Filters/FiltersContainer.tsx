@@ -1,9 +1,10 @@
 import path from "path";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import TypeFilter from "./TypeFilter";
 import PokemonNameFilter from "./PokemonNameFilter";
 import PageFilter from "./PageFilter";
 import { CgPokemonIcon, TfiReloadIcon } from "@/lib/reactIcons";
+import SuperTypeFilter from "./SuperTypeFilter";
 
 type Props = {
   handleSelectType: any;
@@ -15,6 +16,8 @@ type Props = {
   AplyFilters: any;
   resetFilters: any;
   toggleShowFilters: any;
+  onSetSupertype: (superType: string) => void;
+  superType: string;
 };
 
 const FiltersContainer: FC<Props> = ({
@@ -27,13 +30,16 @@ const FiltersContainer: FC<Props> = ({
   AplyFilters,
   resetFilters,
   toggleShowFilters,
+  onSetSupertype,
+  superType,
 }) => {
   return (
     <div className="flex flex-col text-start md:h-[100vh] bg-slate-800 opacity-95 p-4 gap-4 shadow-lg shadow-slate-400 ">
       <button onClick={toggleShowFilters} className="w-fit self-end p-2">
         X
       </button>
-      <TypeFilter onSetPokemonType={handleSelectType} selectedType={pokemonType} />
+      <SuperTypeFilter onSetSuperType={onSetSupertype} superSelected={superType} />
+      {superType === "pokemon" && <TypeFilter onSetPokemonType={handleSelectType} selectedType={pokemonType} />}
       <PokemonNameFilter onSetPokemonNameFilter={handleSetPokemonName} pokemonName={pokemonName} />
       <PageFilter onChangeNumberOfPages={handleNumberOfPagesChange} pageNumber={numberOfPages} />
 
