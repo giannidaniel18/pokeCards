@@ -64,7 +64,7 @@ const PokemonCardContainer = () => {
             )}
           </div>
         </div>
-        <div className={`flex-flex col mt-10 h-[${tamaño}]`}>
+        <div className={`flex flex-col mt-10 h-[${tamaño}] w-full`}>
           <CurrentFilters
             numberOfPages={cards.length}
             pokemonName={filters.pokemonName}

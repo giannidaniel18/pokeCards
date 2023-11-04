@@ -7,10 +7,10 @@ import { CgPokemonIcon, TfiReloadIcon } from "@/lib/reactIcons";
 import SuperTypeFilter from "./SuperTypeFilter";
 
 type Props = {
-  handleSelectType: any;
-  pokemonType: any;
-  handleSetPokemonName: any;
-  pokemonName: any;
+  handleSelectType: (type : string) => void;
+  pokemonType: string;
+  handleSetPokemonName: (pokemonName : string) => void;
+  pokemonName: string;
   handleNumberOfPagesChange: any;
   numberOfPages: any;
   AplyFilters: any;
