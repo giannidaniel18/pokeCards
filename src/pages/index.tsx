@@ -3,9 +3,5 @@ import PokemonCardContainer from "@/components/pages/PokemonCardContainer";
 import { Inter } from "next/font/google";
 
 export default function Home() {
-  return (
-    <Layout>
-      <PokemonCardContainer />
-    </Layout>
-  );
+  return <PokemonCardContainer />;
 }

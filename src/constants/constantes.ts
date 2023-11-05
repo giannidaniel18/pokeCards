@@ -13,3 +13,10 @@ export const ArrayPokemonTypes: pokemonTypes[] = [
   "Psychic",
   "Water",
 ];
+
+export const InitialProps = {
+  initialCards: 25,
+  initialName: "",
+  initialType: "",
+  initialSuperType: "pokemon",
+};

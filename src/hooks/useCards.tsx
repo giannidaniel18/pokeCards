@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useFetch from "./useFetch";
 import { PokemonCardType } from "@/types/types";
+import { InitialProps } from "@/constants/constantes";
 
 export default function useCards(filters: {
   numberOfPages: number;
@@ -11,23 +12,12 @@ export default function useCards(filters: {
   const { startRequest } = useFetch();
   const [loading, setLoading] = useState(false);
   const [cards, setCards] = useState<PokemonCardType[]>([]);
-  // const [types, setTypes] = useState<[]>([]);
-  // const [filters, setFilters] = useState({ numberOfPages: 50, pokemonName: "", pokemonType: "" });
-
-  // const getCardById = async (id: string) => {
-  //   const pokemonId = id;
-  //   const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/cards/${pokemonId}`);
-  //   if (apiResponse.ok) {
-  //     console.log(apiResponse);
-  //     //   setCards(apiResponse.data.data);
-  //   }
-  // };
 
   const getCards = async (
-    cantidad: number = 50,
-    nombre: string = "",
-    type: string = "",
-    supertype: string = "pokemon"
+    cantidad: number = InitialProps.initialCards,
+    nombre: string = InitialProps.initialName,
+    type: string = InitialProps.initialType,
+    supertype: string = InitialProps.initialSuperType
   ) => {
     console.log(supertype);
     setLoading(true);

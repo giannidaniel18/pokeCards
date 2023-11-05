@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import React, { FC, useEffect, useState } from 'react';
-import Image from 'next/image';
-import { PokemonCardType } from '@/types/types';
+import React, { FC, useEffect, useState } from "react";
+import Image from "next/image";
+import { PokemonCardType } from "@/types/types";
+import Link from "next/link";
 // import { fetchTypes } from "@/libs/fetchTypes";
 
 type Props = {
@@ -10,24 +11,14 @@ type Props = {
 };
 
 const PokemonCard: FC<Props> = ({ card }) => {
-  //   const [CardsToShow, setCardsToShow] = useState(cards);
-  //   const [types, setTypes] = useState([]);
-
-  //   const [filters, setFilters] = useState([]);
-
-  //   const typesGetted = async () => {
-  //     const res = await fetchTypes();
-  //     setTypes(res.data);
-  //     return types;
-  //   };
-
   return (
-    <div className="flex flex-col items-center p-4  ">
+    <div className="flex flex-col items-center p-4  md:transition-transform md:hover:scale-110 md:duration-300 ">
       <p className="dark:text-white">{card.name}</p>
-     <div className='w-[250px] h-[350px] relative'>
-      <Image className="relative" alt={card.name} src={card.images.large}  fill/>
-     </div>
-
+      <Link href={`${card.id}`}>
+        <div className="w-[250px] h-[350px] relative ">
+          <Image className="relative  " alt={card.name} src={card.images.large} fill priority placeholder="empty" />
+        </div>
+      </Link>
     </div>
   );
 };

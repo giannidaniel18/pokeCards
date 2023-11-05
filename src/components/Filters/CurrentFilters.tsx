@@ -9,10 +9,7 @@ type Props = {
 
 const CurrentFilters: FC<Props> = ({ pokemonName, pokemonType, superType, numberOfPages }) => {
   return (
-    <div className="flex flex-row gap-4 p-4 w-full justify-end">
-  
-
-
+    <div className="flex flex-col md:flex-row gap-4 p-4 w-fit self-end items-end md:w-full justify-end">
       {pokemonName && (
         <div className="p-2 bg-slate-500  font-semibold text  text-slate-900 rounded-3xl">
           <p>Name : {pokemonName}</p>
@@ -28,13 +25,12 @@ const CurrentFilters: FC<Props> = ({ pokemonName, pokemonType, superType, number
           <p>Card type: {superType}</p>{" "}
         </div>
       )}
-      {numberOfPages && (
+      {!!numberOfPages && (
         <div className="p-2 bg-slate-500  font-semibold text text-slate-900 rounded-3xl">
           <p>Result : {numberOfPages}</p>{" "}
         </div>
       )}
-      </div>
-    
+    </div>
   );
 };
 
