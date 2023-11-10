@@ -7,17 +7,22 @@ import { BiFilterAlt } from "react-icons/bi";
 import CurrentFilters from "../Filters/CurrentFilters";
 import { InitialProps } from "@/constants/constantes";
 
+import CardSkeleton from "../common/CardSkeleton";
+import PagesButtons from "../common/PagesButtons";
+
 const PokemonCardContainer = () => {
   const [superType, setSuperType] = useState(InitialProps.initialSuperType);
   const [pokemonType, setPokemonType] = useState(InitialProps.initialType);
   const [numberOfPages, setNumberOfPages] = useState(InitialProps.initialCards);
   const [pokemonName, setPokemonName] = useState(InitialProps.initialName);
+  const [page, setPage] = useState(InitialProps.initialPage);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     numberOfPages: InitialProps.initialCards,
     superType: superType,
     pokemonName: "",
     pokemonType: "",
+    page: InitialProps.initialPage,
   });
   const { cards, getCards, loading } = useCards(filters);
   // const cards = await fetchPokemon();
@@ -32,6 +37,19 @@ const PokemonCardContainer = () => {
     setPokemonName("");
     setPokemonType("");
     setNumberOfPages(50);
+  };
+  const handleCurrentPage = (action: "next" | "prev") => {
+    if (action === "next") {
+      const newPage = page + 1;
+      setPage(newPage);
+      getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType, filters.superType, newPage);
+    } else if (action === "prev") {
+      if (page > 0) {
+        const newPage = page - 1;
+        setPage(newPage);
+        getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType, filters.superType, newPage);
+      }
+    }
   };
   const handleSelectType = (type: string) => {
     setPokemonType(type);
@@ -48,11 +66,12 @@ const PokemonCardContainer = () => {
     newFilters.pokemonType = pokemonType;
     newFilters.numberOfPages = numberOfPages;
     newFilters.superType = superType;
+    newFilters.page = page;
     setFilters(newFilters);
     // console.log(newFilters);
     // console.log(numberOfPages);
     toggleShowFilters();
-    getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType, filters.superType);
+    getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType, filters.superType, filters.page);
   };
   const tamaño = loading ? "100vh" : "100%";
 
@@ -70,18 +89,21 @@ const PokemonCardContainer = () => {
             )}
           </div>
         </div>
-        <div className={`flex flex-col h-[${tamaño}] w-full`}>
-          {!loading && (
-            <CurrentFilters
-              numberOfPages={cards.length}
-              pokemonName={filters.pokemonName}
-              pokemonType={filters.pokemonType}
-              superType={filters.superType}
-            />
-          )}
-          <div className=" flex flex-row flex-wrap justify-center ">
-            {loading ? "Loading ... " : cards.map((card) => <PokemonCard key={card.id} card={card} />)}
+        <div className={`flex flex-col h-[${tamaño}] w-full gap-5`}>
+          <CurrentFilters
+            numberOfPages={cards.length}
+            pokemonName={filters.pokemonName}
+            pokemonType={filters.pokemonType}
+            superType={filters.superType}
+            loading={loading}
+          />
+          <PagesButtons onSetPage={handleCurrentPage} currentPage={page} />
+          <div className=" flex flex-row flex-wrap justify-center gap-10 ">
+            {loading
+              ? [...Array(filters.numberOfPages)].map((item, index) => <CardSkeleton key={index} />)
+              : cards.map((card) => <PokemonCard key={card.id} card={card} />)}
           </div>
+          <PagesButtons onSetPage={handleCurrentPage} currentPage={page} />
         </div>
       </div>
       <div

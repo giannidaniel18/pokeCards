@@ -19,4 +19,5 @@ export const InitialProps = {
   initialName: "",
   initialType: "",
   initialSuperType: "pokemon",
+  initialPage: 1,
 };

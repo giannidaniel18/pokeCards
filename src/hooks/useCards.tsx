@@ -17,17 +17,19 @@ export default function useCards(filters: {
     cantidad: number = InitialProps.initialCards,
     nombre: string = InitialProps.initialName,
     type: string = InitialProps.initialType,
-    supertype: string = InitialProps.initialSuperType
+    supertype: string = InitialProps.initialSuperType,
+    page: number = InitialProps.initialPage
   ) => {
     console.log(supertype);
     setLoading(true);
     const qFilterName = `name:${nombre}*`;
     const qFilterType = `types:${type}*`;
     const qFilterSuperTypes = `supertype:${supertype}`;
+    const qFilterCurrentPage = `&page=${page}`;
 
     const queryParams = `?q=${qFilterSuperTypes} ${
       supertype !== "pokemon" ? qFilterName : `${qFilterName} ${qFilterType}`
-    } &pageSize=${cantidad} `;
+    } &pageSize=${cantidad} ${qFilterCurrentPage}`;
     // const queryParams = `?q=${qFilterSuperTypes} ${qFilterName && qFilterName} ${
     //   qFilterType && qFilterType
     // } &pageSize=${cantidad} `;
@@ -51,7 +53,6 @@ export default function useCards(filters: {
   // };
 
   useEffect(() => {
-    console.log(filters);
     getCards(filters.numberOfPages, filters.pokemonName, filters.pokemonType, filters.superType);
     // getTypes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
