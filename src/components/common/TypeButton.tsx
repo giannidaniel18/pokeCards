@@ -6,11 +6,12 @@ import React, { FC, useState } from "react";
 
 type Props = {
   type: pokemonTypes;
-  onChangeType: (type: string) => void;
-  selected: boolean;
+  onChangeType?: (type: string) => void;
+  selected?: boolean;
+  variant?: "btn" | "icon";
 };
 
-const TypeButton: FC<Props> = ({ type, onChangeType, selected }) => {
+const TypeButton: FC<Props> = ({ type, onChangeType, selected, variant = "btn" }) => {
   // const [selectedType, setselectedType] = useState<pokemonTypes | null>(null);
   // console.log(selected);
 
@@ -18,7 +19,7 @@ const TypeButton: FC<Props> = ({ type, onChangeType, selected }) => {
 
   const handleSelectedType = (e: any) => {
     e.preventDefault();
-    onChangeType(e.target.id);
+    onChangeType && onChangeType(e.target.id);
   };
 
   const bgColorsCode = {
@@ -36,13 +37,26 @@ const TypeButton: FC<Props> = ({ type, onChangeType, selected }) => {
   };
 
   return (
-    <button
-      id={type}
-      className={`${bgColorsCode[type]} rounded-full p-1 md:hover:scale-110 transition-all w-auto h-auto md:w-6 md:h-6  ${selectedStyle}`}
-      onClick={handleSelectedType}
-    >
-      <Image alt={"tipo de pokemon"} src={`/icons/poketypes/${type}.svg`} width={20} height={20} id={type} />
-    </button>
+    <>
+      {variant === "btn" && (
+        <button
+          id={type}
+          className={`${bgColorsCode[type]} rounded-full p-1 md:hover:scale-110 transition-all w-auto h-auto md:w-6 md:h-6  ${selectedStyle}`}
+          onClick={handleSelectedType}
+        >
+          <Image alt={"tipo de pokemon"} src={`/icons/poketypes/${type}.svg`} width={20} height={20} id={type} />
+        </button>
+      )}
+      {variant === "icon" && (
+        <div
+          id={type}
+          className={`${bgColorsCode[type]} h-fit rounded-full p-1 md:hover:scale-110 transition-all w-fit md:w-6 md:h-6  ${selectedStyle}`}
+          onClick={handleSelectedType}
+        >
+          <Image alt={"tipo de pokemon"} src={`/icons/poketypes/${type}.svg`} width={20} height={20} id={type} />
+        </div>
+      )}
+    </>
   );
 };
 

@@ -15,12 +15,14 @@ const PagesButtons: FC<Props> = ({ onSetPage, currentPage }) => {
 
   return (
     <div className="flex flex-row justify-center gap-3">
-      <button onClick={handlePrevPage} className="rounded-lg bg-slate-300 text-Darkness px-2">
-        {currentPage - 1} {"< "}Prev
-      </button>
+      {currentPage > 1 && (
+        <button onClick={handlePrevPage} className="rounded-lg bg-slate-300 text-Darkness px-2">
+          {currentPage - 1} {"< "}
+        </button>
+      )}
       {currentPage}
       <button onClick={handleNextPage} className="rounded-lg bg-slate-300 text-Darkness px-2">
-        Next {" >"} {currentPage + 1}
+        {" >"} {currentPage + 1}
       </button>
     </div>
   );

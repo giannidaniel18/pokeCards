@@ -25,8 +25,19 @@ const PokemonCardContainer = () => {
     page: InitialProps.initialPage,
   });
   const { cards, getCards, loading } = useCards(filters);
+  const a = [];
+  let b = {};
   // const cards = await fetchPokemon();
-
+  console.log(
+    cards.map(
+      (card) =>
+        (b = {
+          number: card.number,
+          nombre: card.name,
+        }),
+      a.push(b)
+    )
+  );
   const onSetSupertype = (superType: string) => {
     setSuperType(superType);
   };
@@ -34,9 +45,10 @@ const PokemonCardContainer = () => {
     setShowFilters(!showFilters);
   };
   const resetFilters = () => {
-    setPokemonName("");
-    setPokemonType("");
-    setNumberOfPages(50);
+    setPokemonName(InitialProps.initialName);
+    setPokemonType(InitialProps.initialType);
+    setNumberOfPages(InitialProps.initialCards);
+    setPage(InitialProps.initialPage);
   };
   const handleCurrentPage = (action: "next" | "prev") => {
     if (action === "next") {
@@ -66,7 +78,8 @@ const PokemonCardContainer = () => {
     newFilters.pokemonType = pokemonType;
     newFilters.numberOfPages = numberOfPages;
     newFilters.superType = superType;
-    newFilters.page = page;
+    newFilters.page = InitialProps.initialPage;
+    setPage(InitialProps.initialPage);
     setFilters(newFilters);
     // console.log(newFilters);
     // console.log(numberOfPages);
@@ -97,13 +110,20 @@ const PokemonCardContainer = () => {
             superType={filters.superType}
             loading={loading}
           />
-          <PagesButtons onSetPage={handleCurrentPage} currentPage={page} />
-          <div className=" flex flex-row flex-wrap justify-center gap-10 ">
-            {loading
-              ? [...Array(filters.numberOfPages)].map((item, index) => <CardSkeleton key={index} />)
-              : cards.map((card) => <PokemonCard key={card.id} card={card} />)}
+
+          {cards.length > 0 && <PagesButtons onSetPage={handleCurrentPage} currentPage={page} />}
+          <div className="flex flex-row flex-wrap justify-center gap-10 ">
+            {loading ? (
+              [...Array(filters.numberOfPages)].map((item, index) => <CardSkeleton key={index} />)
+            ) : cards.length > 0 ? (
+              cards.map((card) => <PokemonCard key={card.id} card={card} />)
+            ) : (
+              <div className="w-full">
+                <h1 className="text-4xl w-full">No encontramos resultados para tu busqueda </h1>
+              </div>
+            )}
           </div>
-          <PagesButtons onSetPage={handleCurrentPage} currentPage={page} />
+          {cards.length > 0 && <PagesButtons onSetPage={handleCurrentPage} currentPage={page} />}
         </div>
       </div>
       <div

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useFetch from "./useFetch";
 import { PokemonCardType } from "@/types/types";
 import { InitialProps } from "@/constants/constantes";
+import { useCardContext } from "@/context/CardsContext";
 
 export default function useCards(filters: {
   numberOfPages: number;
@@ -9,9 +10,10 @@ export default function useCards(filters: {
   pokemonName: string;
   pokemonType: string;
 }) {
+  const { handleSetCards, cards } = useCardContext();
   const { startRequest } = useFetch();
   const [loading, setLoading] = useState(false);
-  const [cards, setCards] = useState<PokemonCardType[]>([]);
+  // const [cards, setCards] = useState<PokemonCardType[]>([]);
 
   const getCards = async (
     cantidad: number = InitialProps.initialCards,
@@ -20,8 +22,10 @@ export default function useCards(filters: {
     supertype: string = InitialProps.initialSuperType,
     page: number = InitialProps.initialPage
   ) => {
-    console.log(supertype);
+    console.log(page);
+    // if (cards.length && page == InitialProps.initialPage) return;
     setLoading(true);
+
     const qFilterName = `name:${nombre}*`;
     const qFilterType = `types:${type}*`;
     const qFilterSuperTypes = `supertype:${supertype}`;
@@ -34,9 +38,13 @@ export default function useCards(filters: {
     //   qFilterType && qFilterType
     // } &pageSize=${cantidad} `;
 
-    const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/cards${queryParams}`);
+    // const apiResponse = await startRequest("get", `https://api.pokemontcg.io/v2/cards${queryParams}`);
+    const apiResponse = await startRequest(
+      "get",
+      `https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:[1%20TO%20151]`
+    );
     if (apiResponse.ok) {
-      setCards(apiResponse.data.data);
+      handleSetCards(apiResponse.data.data);
       setLoading(false);
     } else {
       setLoading(false);
